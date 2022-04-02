@@ -1,15 +1,22 @@
-<main>
-  <div class="text-center text-gray-700 mt-32 text-8xl">
-    Hello World
-  </div>
+<script>
+  import { Router, Route, Link } from "svelte-navigator";
+  import Homepage from "./Homepage.svelte";
 
-  <div class="text-center text-gray-600 mt-6">
-    Hope you're having a good day.
-  </div>
-</main>
+</script>
 
-<style>
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-</style>
+<Router>
+  <main>
+
+    <Route path="/">
+      <Homepage />
+    </Route>
+
+    <Route path="skilltrees">
+      <h1> My Skilltrees </h1>
+    </Route>
+
+    <Route path="construct">
+      <h1> Construct new skilltree </h1>
+    </Route>
+  </main>
+</Router>
