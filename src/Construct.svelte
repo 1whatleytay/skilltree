@@ -1,6 +1,7 @@
 <script>
     import { Configuration, OpenAIApi } from 'openai';
     import axios from "axios";
+import { listen } from 'svelte/internal';
 
     const key = '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'
 
@@ -35,24 +36,9 @@
     console.log(completion.data.choices[0]["text"]);
 
     let result = completion.data.choices[0]["text"];
-    
-    let parsed = false;
 
-    let dashes = result.split("-").length;
-        let nums = result.split(".").length;
-        if (dashes > nums) {
-            result = result.split("-");
-        } else {
-            result = result.split(".");
-        }
-        if (result.length >= 2) {
-            parsed = true;
-        }
-
-    while (!parsed) {
-        
-        completion = await openai.createCompletion('text-davinci-002', {
-        prompt: request,
+    let parser = await openai.createCompletion('text-davinci-002', {
+        prompt: "format the following list into a javascript array format: " + result,
 
         // playground settings
         temperature: 0.7,
@@ -60,44 +46,41 @@
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0
-    })
+    });
 
-    // console.log(completion);
-    console.log(completion.data.choices[0]["text"]);
+    result = JSON.parse(parser.data.choices[0]["text"]);
+    
+    // let parsed = false;
 
-    result = completion.data.choices[0]["text"];
+    // let list_list = result.split("\n");
 
-        let dashes = result.split("-").length;
-        let nums = result.split(".").length;
-        if (dashes > nums) {
-            result = result.split("-");
-        } else {
-            // let start_index = result.indexOf("1");
-            // let end_index = result.indexOf("2");
+    // let i = 0
+    // while (i < list_list.length) {
+    //     console.log(list_list[i].charAt(0), list_list[i].charAt(1), list_list[i].charAt(2), list_list[i].slice(1));
+    //     if (list_list[i].charAt(0) == "-"){
+    //         list_list[i] = list_list[i].slice(1);
+    //         console.log(list_list);
+    //         i++;
+    //     }else if (list_list[i].charAt(1) == "."){
+    //         list_list[i] = list_list[i].slice(3);
+    //         console.log(list_list);
+    //         i++;
+    //     }else{
+    //         completion = await openai.createCompletion('text-davinci-002', {
+    //             prompt: request,
 
-            result = "." + result;
-            result = result.split(".");
-            result.shift();
-            result[0] = result[0].substring(1);
-            
-        }
-        if (result.length >= 2) {
-            parsed = true;
-
-            let toDrop = [];
-
-            for (let i = 0; i < result.length; i++) {
-                if (result[i].trim() == "") {
-                    toDrop.push(i);
-                }
-            }
-            let modifier = 0;
-            for (let i = toDrop.length - 1; i >= 0; i--) {
-                result.shift(toDrop[i]-modifier);
-                modifier++;
-            }
-        }
-    }
+    //             // playground settings
+    //             temperature: 0.7,
+    //             max_tokens: 256,
+    //             top_p: 1,
+    //             frequency_penalty: 0,
+    //             presence_penalty: 0
+    //         })
+    //         result = completion.data.choices[0]["text"];
+    //         i = 0
+    //         console.log("its been reset")
+    //     }
+    // }
 
     return result[0];
 
