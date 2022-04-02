@@ -1,5 +1,8 @@
 <script>
 
+    import TreeVSN from './lib/TreeVSN.svelte'
+    import TreeInPlaceAdapter from './lib/TreeInPlaceAdapter.svelte'
+
     function makeTree(prompt) {
         return {"topic": prompt,
                 "children": [],
@@ -179,8 +182,31 @@ import { listen } from 'svelte/internal';
 <!-- svelte-ignore a11y-missing-attribute -->
 <html>
     {#await promise}
-        <h1> Waiting... </h1>
+        <!-- I got bored watching it so I made it pulse -->
+        <div class="mt-12 text-6xl text-center animate-pulse"> Waiting... </div>
     {:then response}
-        <h1> Response: {JSON.stringify(response)} </h1>
+        <div>{JSON.stringify(response)}</div>
+
+        <div class="px-6">
+            <div class="text-lg mt-8 mb-2">
+                In Place Visualizer
+            </div>
+            <div class="rounded border border-gray-800 w-full mx-1 lg:w-3/4">
+                <TreeInPlaceAdapter tree={response} />
+            </div>
+        </div>
+
+        <div class="px-6">
+            <div class="text-lg mt-8 mb-2">
+                VSN Visualizer
+            </div>
+            <div class="rounded border border-gray-800 w-full mx-1 lg:w-3/4">
+                <TreeVSN tree={response} />
+            </div>
+        </div>
+
+        <div class="h-48">
+            <!-- Spacer -->
+        </div>
     {/await}
 </html>
