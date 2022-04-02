@@ -2,8 +2,10 @@ import { Configuration, OpenAIApi } from 'openai'
 
 import querystring from 'querystring'
 
+const key = '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'
+
 const openai = new OpenAIApi(new Configuration({
-  apiKey: process.env.OPENAI_KEY
+  apiKey: key
 }))
 
 export default async function (req, res, reqUrl) {
