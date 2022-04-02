@@ -1,8 +1,16 @@
 <script>
+
+    function makeTree(prompt) {
+        return {"topic": prompt,
+                "children": [],
+                "completed": false};
+    };
+
     import { Configuration, OpenAIApi } from 'openai';
     import axios from "axios";
+import { listen } from 'svelte/internal';
 
-    const key = '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'
+    const key = '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'//'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'
 
     const openai = new OpenAIApi(new Configuration({
     apiKey: key
@@ -17,7 +25,7 @@
     // Write a function to take the prompt and send it to the node server and await a response
 
     async function getList() {
-        const request = "make a long list of topics i need to learn to learn " + prompt; 
+        let request = "Make me a list of topics to learn " + prompt; 
         // console.log(prompt);
 
         let completion = await openai.createCompletion('text-davinci-002', {
@@ -38,65 +46,6 @@
     
     let parsed = false;
 
-    let dashes = result.split("-").length;
-        let nums = result.split(".").length;
-        if (dashes > nums) {
-            result = result.split("-");
-        } else {
-            result = result.split(".");
-        }
-        if (result.length >= 2) {
-            parsed = true;
-        }
-
-    while (!parsed) {
-        
-        completion = await openai.createCompletion('text-davinci-002', {
-        prompt: request,
-
-        // playground settings
-        temperature: 0.7,
-        max_tokens: 256,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0
-    })
-
-    // console.log(completion);
-    console.log(completion.data.choices[0]["text"]);
-
-    result = completion.data.choices[0]["text"];
-
-        let dashes = result.split("-").length;
-        let nums = result.split(".").length;
-        if (dashes > nums) {
-            result = result.split("-");
-        } else {
-            // let start_index = result.indexOf("1");
-            // let end_index = result.indexOf("2");
-
-            result = "." + result;
-            result = result.split(".");
-            result.shift();
-            result[0] = result[0].substring(1);
-            
-        }
-        if (result.length >= 2) {
-            parsed = true;
-
-<<<<<<< Updated upstream
-            let toDrop = [];
-
-            for (let i = 0; i < result.length; i++) {
-                if (result[i].trim() == "") {
-                    toDrop.push(i);
-                }
-            }
-            let modifier = 0;
-            for (let i = toDrop.length - 1; i >= 0; i--) {
-                result.shift(toDrop[i]-modifier);
-                modifier++;
-=======
     let list_list = result.split("\n");
     let i = 2
     let rep = 0;
@@ -109,6 +58,73 @@
             i++;
         }else if (list_list[i].charAt(1) == "."){
             list_list[i] = list_list[i].slice(2);
+            // console.log(list_list);
+            i++;
+        }else{
+            rep ++;
+            console.log(request);
+            completion = await openai.createCompletion('text-davinci-002', {
+                prompt: request,
+
+                // playground settings
+                temperature: 0.7,
+                max_tokens: 256,
+                top_p: 1,
+                frequency_penalty: 0,
+                presence_penalty: 0
+            })
+            result = completion.data.choices[0]["text"];
+            // console.log(result);
+            i = 2
+            console.log("its been reset")
+            if (rep >= 2) {
+                console.log("end");
+                i = list_list.length;
+            }
+        }
+    }
+
+    let topicTree = makeTree(prompt);
+
+    list_list.shift();
+    list_list.shift();
+
+    for (let i = 0; i < list_list.length; i++){
+        topicTree["children"].push(makeTree(list_list[i]));
+    }
+
+    for (let k = 0; k < topicTree["children"].length; k++){
+        let request = "Make me a list of topics to learn " + topicTree["children"][k]["topic"]; 
+        // console.log(prompt);
+
+        let completion = await openai.createCompletion('text-davinci-002', {
+        prompt: request,
+
+        // playground settings
+        temperature: 0.7,
+        max_tokens: 256,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0
+    })
+
+    // console.log(completion);
+    // console.log(completion.data.choices[0]["text"]);
+
+
+    //let list_list = result.split("\n");
+    let rep = 0;
+    //let result = completion.data.choices[0]["text"];
+    let i1 = 2
+    while (i1 < list_list.length) {
+        // console.log(list_list[i]);
+        // console.log(list_list[i].charAt(0), list_list[i].charAt(1), list_list[i].charAt(0) == String("-"));
+        if (list_list[i1].charAt(0) == "-"){
+            list_list[i1] = list_list[i1].slice(1);
+            // console.log(list_list);
+            i++;
+        }else if (list_list[i1].charAt(1) == "."){
+            list_list[i1] = list_list[i1].slice(2);
             // console.log(list_list);
             i++;
         }else{
@@ -133,12 +149,18 @@
                 console.log("end");
                 i = list_list.length;
                 break;
->>>>>>> Stashed changes
-            }
         }
     }
 
-    return result[0];
+    list_list.shift();
+    list_list.shift();
+    for (let j = 0; j < list_list.length; j++){
+        topicTree["children"][k]["children"].push(makeTree(list_list[j]));
+    }
+    }
+}
+
+    return topicTree;
 
         // const { data } = await axios.get('http://127.0.0.1:3001/prompt', {
         //     params: { text: request }
@@ -159,6 +181,6 @@
     {#await promise}
         <h1> Waiting... </h1>
     {:then response}
-        <h1> Response: {response} </h1>
+        <h1> Response: {JSON.stringify(response)} </h1>
     {/await}
 </html>
