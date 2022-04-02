@@ -1,5 +1,7 @@
 <script>
     import { Router, Route, Link } from "svelte-navigator";
+
+    let prompt = "";
   
   </script>
 
@@ -21,8 +23,8 @@
               Build a skilltree
             </label>
             <div class="flex items-center">
-              <input class="shadow mr-3 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="skill" type="text" placeholder="Enter topic here...">
-              <Link to="/construct">
+              <input bind:value={prompt} class="shadow mr-3 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="skill" type="text" placeholder="Enter topic here...">
+              <Link to="/construct/{prompt}">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" >
                     Construct
                 </button>
