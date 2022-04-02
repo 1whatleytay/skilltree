@@ -13,7 +13,7 @@
     import axios from "axios";
 import { listen } from 'svelte/internal';
 
-    const key = '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'//'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'
+    const key = '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'//'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'
 
     const openai = new OpenAIApi(new Configuration({
     apiKey: key
