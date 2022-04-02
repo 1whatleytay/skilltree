@@ -3,7 +3,7 @@
     import axios from "axios";
 import { listen } from 'svelte/internal';
 
-    const key = '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'
+    const key = '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'//'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'
 
     const openai = new OpenAIApi(new Configuration({
     apiKey: key
@@ -18,10 +18,10 @@ import { listen } from 'svelte/internal';
     // Write a function to take the prompt and send it to the node server and await a response
 
     async function getList() {
-        const request = "make a long list of topics i need to learn to learn " + prompt; 
+        const request = "Make me a list of topics to learn " + prompt + " in array format"; 
         // console.log(prompt);
 
-        let completion = await openai.createCompletion('text-davinci-002', {
+        let completion = await openai.createCompletion('text-curie-001', {
         prompt: request,
 
         // playground settings
@@ -36,53 +36,40 @@ import { listen } from 'svelte/internal';
     console.log(completion.data.choices[0]["text"]);
 
     let result = completion.data.choices[0]["text"];
-
-    let parser = await openai.createCompletion('text-davinci-002', {
-        prompt: "format the following list into a javascript array format: " + result,
-
-        // playground settings
-        temperature: 0.7,
-        max_tokens: 256,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0
-    });
-
-    result = JSON.parse(parser.data.choices[0]["text"]);
     
-    // let parsed = false;
+    let parsed = false;
 
-    // let list_list = result.split("\n");
+    let list_list = result.split("\n");
+    let i = 2
+    while (i < list_list.length) {
+        // console.log(list_list[i]);
+        // console.log(list_list[i].charAt(0), list_list[i].charAt(1), list_list[i].charAt(0) == String("-"));
+        if (list_list[i].charAt(0) == "-"){
+            list_list[i] = list_list[i].slice(1);
+            console.log(list_list);
+            i++;
+        }else if (list_list[i].charAt(1) == "."){
+            list_list[i] = list_list[i].slice(2);
+            console.log(list_list);
+            i++;
+        }else{
+            completion = await openai.createCompletion('text-curie-001', {
+                prompt: request,
 
-    // let i = 0
-    // while (i < list_list.length) {
-    //     console.log(list_list[i].charAt(0), list_list[i].charAt(1), list_list[i].charAt(2), list_list[i].slice(1));
-    //     if (list_list[i].charAt(0) == "-"){
-    //         list_list[i] = list_list[i].slice(1);
-    //         console.log(list_list);
-    //         i++;
-    //     }else if (list_list[i].charAt(1) == "."){
-    //         list_list[i] = list_list[i].slice(3);
-    //         console.log(list_list);
-    //         i++;
-    //     }else{
-    //         completion = await openai.createCompletion('text-davinci-002', {
-    //             prompt: request,
+                // playground settings
+                temperature: 0.7,
+                max_tokens: 256,
+                top_p: 1,
+                frequency_penalty: 0,
+                presence_penalty: 0
+            })
+            result = completion.data.choices[0]["text"];
+            i = 2
+            console.log("its been reset")
+        }
+    }
 
-    //             // playground settings
-    //             temperature: 0.7,
-    //             max_tokens: 256,
-    //             top_p: 1,
-    //             frequency_penalty: 0,
-    //             presence_penalty: 0
-    //         })
-    //         result = completion.data.choices[0]["text"];
-    //         i = 0
-    //         console.log("its been reset")
-    //     }
-    // }
-
-    return result[0];
+    return list_list;
 
         // const { data } = await axios.get('http://127.0.0.1:3001/prompt', {
         //     params: { text: request }
