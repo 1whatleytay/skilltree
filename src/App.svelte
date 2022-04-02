@@ -1,41 +1,22 @@
-<main>
-  <div class="text-center text-gray-700 mt-32 text-8xl">
-    Skilltree
-  </div>
+<script>
+  import { Router, Route, Link } from "svelte-navigator";
+  import Homepage from "./Homepage.svelte";
 
-  <div class="text-center text-gray-600 mt-6">
-    Make learning easier.
-  </div>
+</script>
 
-  <!-- Add a search bar with a button to its right in a row -->
-  <div class="flex justify-center mt-32">
-    <div class="w-full max-w-sm">
-      <form class="bg-white shadow-md rounded px-12 pt-6 pb-8 mb-4">
-        <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
-            Build a skilltree
-          </label>
-          <div class="flex items-center">
-            <input class="shadow mr-3 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="skill" type="text" placeholder="Enter topic here...">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-              Construct
-            </button>
-          </div>
-        </div>
-        <div class="flex items-center justify-between">
-          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mx-auto" type="button">
-            My Skilltrees
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</main>
+<Router>
+  <main>
 
-<style>
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+    <Route path="/">
+      <Homepage />
+    </Route>
 
+    <Route path="skilltrees">
+      <h1> My Skilltrees </h1>
+    </Route>
 
-</style>
+    <Route path="construct">
+      <h1> Construct new skilltree </h1>
+    </Route>
+  </main>
+</Router>
