@@ -84,6 +84,7 @@
         if (result.length >= 2) {
             parsed = true;
 
+<<<<<<< Updated upstream
             let toDrop = [];
 
             for (let i = 0; i < result.length; i++) {
@@ -95,6 +96,44 @@
             for (let i = toDrop.length - 1; i >= 0; i--) {
                 result.shift(toDrop[i]-modifier);
                 modifier++;
+=======
+    let list_list = result.split("\n");
+    let i = 2
+    let rep = 0;
+    while (i < list_list.length) {
+        // console.log(list_list[i]);
+        // console.log(list_list[i].charAt(0), list_list[i].charAt(1), list_list[i].charAt(0) == String("-"));
+        if (list_list[i].charAt(0) == "-"){
+            list_list[i] = list_list[i].slice(1);
+            // console.log(list_list);
+            i++;
+        }else if (list_list[i].charAt(1) == "."){
+            list_list[i] = list_list[i].slice(2);
+            // console.log(list_list);
+            i++;
+        }else{
+            console.log(request);
+            rep ++;
+            completion = await openai.createCompletion('text-davinci-002', {
+                prompt: request,
+
+                // playground settings
+                temperature: 0.7,
+                max_tokens: 256,
+                top_p: 1,
+                frequency_penalty: 0,
+                presence_penalty: 0
+            })
+            result = completion.data.choices[0]["text"];
+            // console.log(result);
+            i = 2
+            console.log("its been reset")
+            console.log(rep);
+            if (rep >= 2) {
+                console.log("end");
+                i = list_list.length;
+                break;
+>>>>>>> Stashed changes
             }
         }
     }
