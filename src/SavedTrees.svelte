@@ -24,3 +24,5 @@
 <button on:click={() => skillTrees.set(JSON.stringify(tree2))}>
 	tree2
 </button>
+
+<!-- This code was used for testing the store, should be redone, nothing in relation to the actual page -->
