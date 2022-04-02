@@ -7,30 +7,74 @@
 
   let container // : HtmlElement
 
+  // Provided
+  export let tree
+
+  function adaptTreeVSN(input) {
+    const labels = {}
+
+    const nodes = []
+    const edges = []
+
+    let id = 0
+
+    const helper = (tree) => {
+      // Double Lookup is Bad
+      if (!labels[tree.topic]) {
+        const current = id++
+
+        labels[tree.topic] = current
+        nodes.push({ id: current, label: tree.topic })
+      }
+
+      console.log(tree)
+
+      const current = labels[tree.topic]
+
+      tree.children
+        .forEach(child => {
+          const destination = helper(child)
+
+          edges.push({ from: current, to: destination })
+        })
+
+      return current // return id
+    }
+
+    helper(input)
+
+    console.log({nodes, edges})
+
+    return { nodes: new DataSet(nodes), edges: new DataSet(edges) }
+  }
+
   onMount(() => {
-    // incomplete, leaving in case
-    const nodes = new DataSet([
-      { id: 1, label: 'Intro to Node.js' },
-      { id: 2, label: 'Intermediate Node.js' },
-      { id: 3, label: 'Advanced Node.js' },
-      { id: 4, label: 'First Http Server' },
-    ])
+    // Play with these settings?
+    const network = new Network(container, adaptTreeVSN(tree), {
+      nodes: {
+        color: {
+          border: 'rgb(21 128 61)',
+          background: 'rgb(134 239 172)',
 
-    const edges = new DataSet([
-      { from: 1, to: 2 },
-      { from: 1, to: 4 },
-      { from: 2, to: 3 },
-      { from: 4, to: 3 },
-    ])
-
-    const network = new Network(container, { nodes, edges }, {})
+          highlight: {
+            border: 'rgb(20 83 45)',
+            background: 'rgb(134 239 172)'
+          }
+        },
+        heightConstraint: {
+          minimum: 20
+        }
+      },
+      physics: {
+        repulsion: {
+          nodeDistance: 400,
+          springLength: 400
+        }
+      }
+    })
   })
 </script>
 
-<div>
-  Two Roots
-</div>
-
-<div bind:this={container} class="w-64 h-64 bg-red-100">
+<div bind:this={container} class="w-full h-96">
 
 </div>
