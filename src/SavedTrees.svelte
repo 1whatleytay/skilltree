@@ -12,9 +12,11 @@
         name: 'test2',
         skills: []
     };
+
+    $: activeObj = $skillTrees;
 </script>
 
-<h1>Theme: {$skillTrees}</h1>
+<h1>Theme: {JSON.parse(activeObj).name}</h1>
 
 <button on:click={() => skillTrees.set(JSON.stringify(tree1))}>
 	tree1
