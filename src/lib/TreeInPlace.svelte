@@ -14,16 +14,18 @@
   let debugCompletedSet = new Set()
 
   // for debug
-  const completedNode = node => node.completed || debugCompletedSet.has(node.name)
+  const completedNode = node => node.completed || node.node.completed || debugCompletedSet.has(node.name)
   const completedLayer = layer => layer.every(node => completedNode(node))
 
   const begin = (node) => {
     dispatch('begin', { node })
     // debug, I'm not removing this before pushing
-    debugCompletedSet.add(name)
+    debugCompletedSet.add(node.name)
     debugCompletedSet = debugCompletedSet // a
 
-    // node.node.completed = true
+    if (node.node) {
+      node.node.completed = true
+    }
   }
 </script>
 
@@ -33,7 +35,7 @@
     <!-- Feel Free to Drop Background Effect -->
     <div class="transition-colors duration-300 {completedLayer(level, debugCompletedSet) ? 'bg-green-50' : ''}">
       <div class="
-        flex border-t pt-6 border-dotted mx-auto max-w-4xl
+        flex flex-wrap border-t pt-6 border-dotted mx-auto max-w-4xl
         {level.length > 4 ? 'overflow-x-scroll pb-8' : 'justify-around'}">
         {#each level as node}
           <div class="flex flex-col mx-4">
@@ -81,7 +83,7 @@
                 {node === selectedNode
                   ? 'opacity-1 translate-y-0'
                   : 'opacity-0 -translate-y-6'}">
-              Begin
+              {completedNode(node, debugCompletedSet) ? 'Revisit' : 'Begin'}
             </button>
           </div>
         {/each}

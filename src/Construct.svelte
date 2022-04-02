@@ -1,4 +1,22 @@
 <script>
+    import { Router, Route, Link } from "svelte-navigator";
+    import {skillTrees} from './store.js';
+    let fileName = "";
+
+    function addTree(fileName, skills){
+        let activeObj = $skillTrees;
+        console.log(!$skillTrees);
+        if (skillTrees){
+            skillTrees.set(JSON.stringify({fileName: skills}));
+            console.log("new json: " + JSON.parse($skillTrees));
+        }else{
+            let new_json = JSON.parse($skillTrees);
+            console.log("promise file" + skills + $skillTrees);
+            new_json[fileName] = skills;
+            skillTrees.set(JSON.stringify(new_json));
+            console.log("new json: " + JSON.stringify(JSON.parse($skillTrees)));
+        }
+    }
 
     import TreeVSN from './lib/TreeVSN.svelte'
     import TreeInPlaceAdapter from './lib/TreeInPlaceAdapter.svelte'
@@ -185,6 +203,26 @@ import { listen } from 'svelte/internal';
         <!-- I got bored watching it so I made it pulse -->
         <div class="mt-12 text-6xl text-center animate-pulse"> Waiting... </div>
     {:then response}
+        <h1> Response: {JSON.stringify(response)} </h1>
+        <div class="flex justify-center mt-32">
+            <div class="w-full max-w-sm">
+              <form class="bg-white shadow-md rounded px-12 pt-6 pb-8 mb-4">
+                <div class="mb-4">
+                  <label class="block text-gray-700 text-sm font-bold mb-2 textAlign-center" for="username">
+                    Save this skilltree
+                  </label>
+                  <div class="flex items-center">
+                    <input bind:value={fileName} class="shadow mr-3 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="skill" type="text" placeholder="Enter Skilltree name here">
+                    <Link to="/construct/{prompt}">
+                      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" on:click={() => addTree(fileName, response)}>
+                          Save
+                      </button>
+                  </Link>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
         <div>{JSON.stringify(response)}</div>
 
         <div class="px-6">
