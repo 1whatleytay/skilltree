@@ -1,6 +1,7 @@
 <script>
   import { Router, Route, Link } from "svelte-navigator";
   import Homepage from "./Homepage.svelte";
+  import SavedTrees from "./SavedTrees.svelte";
 
 </script>
 
@@ -12,7 +13,7 @@
     </Route>
 
     <Route path="skilltrees">
-      <h1> My Skilltrees </h1>
+      <SavedTrees />
     </Route>
 
     <Route path="construct">
