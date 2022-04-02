@@ -23,7 +23,9 @@
     debugCompletedSet.add(name)
     debugCompletedSet = debugCompletedSet // a
 
-    node.node.completed = true
+    if (node.node) {
+      node.node.completed = true
+    }
   }
 </script>
 
