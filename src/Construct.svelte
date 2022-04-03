@@ -9,7 +9,12 @@
 
   import { Configuration, OpenAIApi } from 'openai';
 
+  // I have no soul
+  let saveName = null
+
   function addTree(fileName, skills) {
+    saveName = fileName
+
     console.log({fileName, skills})
     let activeObj = $skillTrees;
     console.log($skillTrees);
@@ -214,6 +219,8 @@
     <!-- I got bored watching it so I made it pulse -->
     <div class="mt-12 text-6xl text-center animate-pulse"> Building... </div>
   {:then response}
-    <TreeInPlaceAdapter allow_save={true} tree={response} on:save={event => addTree(event.detail.name, response)} />
+    <TreeInPlaceAdapter allow_save={true} tree={response}
+      on:begin={() => saveName && addTree(saveName, response)}
+      on:save={event => addTree(event.detail.name, response)} />
   {/await}
 </html>

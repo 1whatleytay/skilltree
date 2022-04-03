@@ -1,7 +1,9 @@
 <script>
-    import { Router, Route, Link } from "svelte-navigator";
+    import { Router, Route, Link, useNavigate } from "svelte-navigator";
 
     let prompt = "";
+
+    const navigate = useNavigate()
   
   </script>
 
@@ -17,7 +19,7 @@
     <!-- Add a search bar with a button to its right in a row -->
     <div class="flex justify-center mt-32">
       <div class="w-full max-w-sm">
-        <form class="bg-white shadow-md rounded px-12 pt-6 pb-8 mb-4">
+        <form class="bg-white shadow-md rounded px-12 pt-6 pb-8 mb-4" on:submit={() => navigate(`/construct/${prompt}`)}>
           <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
               Build a skilltree
@@ -25,7 +27,7 @@
             <div class="flex items-center">
               <input bind:value={prompt} class="shadow mr-3 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="skill" type="text" placeholder="Enter topic here...">
               <Link to="/construct/{prompt}">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" >
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" >
                     Construct
                 </button>
             </Link>
