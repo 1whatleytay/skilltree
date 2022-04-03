@@ -48,25 +48,31 @@
     console.log(layout);
 </script>
 
-<!-- svelte-ignore a11y-missing-attribute -->
-<html>
-    <div class="text-center text-gray-700 mt-32 text-8xl">
+<div class="flex flex-wrap items-center justify-center mt-32">
+    <Link to="/">
+        <button class="mr-12 w-24 bg-gray-200 px-4 py-2 my-4 rounded-lg">
+            &#x2039; Back
+        </button>
+    </Link>
+
+    <div class="text-center text-gray-700 text-4xl lg:text-8xl">
         Saved Skilltrees
-      </div>
-    <body class="justify-center mt-32">
-        {#each layout as row}
-            <div class="row mt-4">
-                {#each row as cell}
-                    <Link to="/skilltree/{cell[0]}">
-                        <div class="column mt-6">
-                            <div class="card"> {cell[0]} </div>
-                        </div>
-                    </Link>
-                {/each}
-            </div>
-        {/each}
-    </body>
-</html>
+    </div>
+</div>
+
+<div class="justify-center mt-32">
+    {#each layout as row}
+        <div class="row mt-4">
+            {#each row as cell}
+                <Link to="/skilltree/{cell[0]}">
+                    <div class="column mt-6">
+                        <div class="card"> {cell[0]} </div>
+                    </div>
+                </Link>
+            {/each}
+        </div>
+    {/each}
+</div>
 
 <style>
     * {
