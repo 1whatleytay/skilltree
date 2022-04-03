@@ -1,5 +1,6 @@
 <script>
   import { onMount, createEventDispatcher } from 'svelte'
+  import axios from 'axios'
 
   import { Link } from 'svelte-navigator'
 
@@ -52,7 +53,24 @@
 
   $: startCountUp(proportionCompleted)
 
-    function begin(node) {
+  function begin(node) {
+    // axios.get('https://en.wikipedia.org/w/api.php', {
+    //   params: {
+    //     action: 'query',
+    //     list: 'search',
+    //     format: 'json',
+    //     srsearch: node.name
+    //   }
+    // }).then(response => {
+    //   const results = response.data.query.search
+    //
+    //   if (results.length > 0) {
+    //     window.open(`https://en.wikipedia.org/wiki/${results[0].title}`)
+    //   }
+    // })
+
+    window.open(`https://en.wikipedia.org/w/index.php?search=${node.name}`)
+
     // debug, I'm not removing this before pushing
     debugCompletedSet.add(node.name)
     debugCompletedSet = debugCompletedSet // a
