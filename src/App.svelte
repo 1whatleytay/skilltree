@@ -5,6 +5,12 @@
   import Construct from "./Construct.svelte";
   import Skilltree from "./Skilltree.svelte";
 
+  import {skillTrees} from './store.js';
+
+  if ($skillTrees == "null") {
+    skillTrees.set(JSON.stringify({}));
+  };
+
 </script>
 
 <Router>
