@@ -57,7 +57,7 @@
         {#each layout as row}
             <div class="row mt-4">
                 {#each row as cell}
-                    <Link to="/skilltree/{JSON.stringify(cell[1])}">
+                    <Link to="/skilltree/{cell[0]}">
                         <div class="column mt-6">
                             <div class="card"> {cell[0]} </div>
                         </div>

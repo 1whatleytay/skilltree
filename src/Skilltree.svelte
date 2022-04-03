@@ -1,5 +1,7 @@
 <script>
-    export let obj_string;
+    export let obj_key;
 
-    let treeObj = JSON.parse(obj_string);
+    import {skillTrees} from './store.js';
+
+    let tree_obj = JSON.parse($skillTrees)[obj_key];
 </script>
