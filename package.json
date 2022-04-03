@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "axios": "^0.26.1",
+    "nprogress": "^0.2.0",
     "openai": "^2.0.5",
     "svelte-navigator": "^3.1.5",
     "vis-data": "^7.1.4",
