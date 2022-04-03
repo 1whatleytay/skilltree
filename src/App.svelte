@@ -3,6 +3,7 @@
   import Homepage from "./Homepage.svelte";
   import SavedTrees from "./SavedTrees.svelte";
   import Construct from "./Construct.svelte";
+  import Skilltree from "./Skilltree.svelte";
 
 </script>
 
@@ -19,6 +20,10 @@
 
     <Route path="/construct/:prompt" let:params>
       <Construct prompt={params.prompt}/>
+    </Route>
+
+    <Route path="/construct/:obj" let:params>
+      <Skilltree obj_string={params.obj}/>
     </Route>
   </main>
 </Router>
