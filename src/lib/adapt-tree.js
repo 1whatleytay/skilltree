@@ -70,3 +70,22 @@ export function adaptTreeLayers(input) {
 
   return result
 }
+
+// I've F8***** lost it
+export function adaptAdapter(input) {
+  const exit = { name: 'Unknown', levels: [] }
+
+  if (input.length < 1) {
+    return exit
+  }
+
+  const rootLevel = input[0]
+
+  if (rootLevel.length !== 1) {
+    return exit
+  }
+
+  const root = rootLevel[0]
+
+  return { name: root.name, tree: input.slice(1) }
+}

@@ -4,9 +4,11 @@
     let fileName = "";
 
     function addTree(fileName, skills){
+      console.log({fileName, skills})
+
         let activeObj = $skillTrees;
-        console.log(!$skillTrees);
-        if ($skillTrees === null){
+        console.log($skillTrees);
+        if ($skillTrees === 'null'){
             let obj = {};
             obj[fileName] = skills;
             skillTrees.set(JSON.stringify(obj));
@@ -205,46 +207,6 @@ import { listen } from 'svelte/internal';
         <!-- I got bored watching it so I made it pulse -->
         <div class="mt-12 text-6xl text-center animate-pulse"> Waiting... </div>
     {:then response}
-        <h1> Response: {JSON.stringify(response)} </h1>
-        <div class="flex justify-center mt-32">
-            <div class="w-full max-w-sm">
-              <form class="bg-white shadow-md rounded px-12 pt-6 pb-8 mb-4">
-                <div class="mb-4">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 textAlign-center" for="username">
-                    Save this skilltree
-                  </label>
-                  <div class="flex items-center">
-                    <input bind:value={fileName} class="shadow mr-3 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="skill" type="text" placeholder="Enter Skilltree name here">
-                      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" on:click={() => addTree(fileName, response)}>
-                          Save
-                      </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        <div>{JSON.stringify(response)}</div>
-
-        <div class="px-6">
-            <div class="text-lg mt-8 mb-2">
-                In Place Visualizer
-            </div>
-            <div class="rounded border border-gray-800 w-full mx-1 lg:w-3/4">
-                <TreeInPlaceAdapter tree={response} />
-            </div>
-        </div>
-
-        <div class="px-6">
-            <div class="text-lg mt-8 mb-2">
-                VSN Visualizer
-            </div>
-            <div class="rounded border border-gray-800 w-full mx-1 lg:w-3/4">
-                <TreeVSN tree={response} />
-            </div>
-        </div>
-
-        <div class="h-48">
-            <!-- Spacer -->
-        </div>
+        <TreeInPlaceAdapter allow_save={true} tree={response} on:save={event => addTree(event.detail.name, response)} />
     {/await}
 </html>
