@@ -6,8 +6,10 @@
     function addTree(fileName, skills){
         let activeObj = $skillTrees;
         console.log(!$skillTrees);
-        if (skillTrees){
-            skillTrees.set(JSON.stringify({fileName: skills}));
+        if ($skillTrees === null){
+            let obj = {};
+            obj[fileName] = skills;
+            skillTrees.set(JSON.stringify(obj));
             console.log("new json: " + JSON.parse($skillTrees));
         }else{
             let new_json = JSON.parse($skillTrees);
@@ -213,11 +215,9 @@ import { listen } from 'svelte/internal';
                   </label>
                   <div class="flex items-center">
                     <input bind:value={fileName} class="shadow mr-3 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="skill" type="text" placeholder="Enter Skilltree name here">
-                    <Link to="/construct/{prompt}">
                       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" on:click={() => addTree(fileName, response)}>
                           Save
                       </button>
-                  </Link>
                   </div>
                 </div>
               </form>

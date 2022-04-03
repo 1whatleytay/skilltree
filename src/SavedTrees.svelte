@@ -4,12 +4,13 @@
 
     console.log(1);
 
-    $: activeObj = $skillTrees;
+    let activeObj = $skillTrees;
 
-    if (typeof(activeObj) === "undefined") {
-        activeObj = JSON.stringify({"tree 1": {"topic": "linear algebra"}, "tree 2": {"topic": "functional algebra"}, "tree 3": {"topic": "algebra"}, 
-        "tree 4": {"topic": "algebra"}, "tree 5": {"topic": "algebra"}, "tree 6": {"topic": "algebra"}, 
-        "tree 7": {"topic": "algebra"}, "tree 8": {"topic": "algebra"}, "tree 9": {"topic": "algebra"}, "tree 10": {"topic": "algebra"}});
+    console.log($skillTrees);
+    console.log(activeObj);
+
+    if (typeof(activeObj) == "undefined") {
+        activeObj = JSON.stringify({});
     };
 
     console.log(1);
