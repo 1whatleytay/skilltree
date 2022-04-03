@@ -1,9 +1,19 @@
 <script>
-  import { createEventDispatcher } from 'svelte'
+  import { onMount, createEventDispatcher } from 'svelte'
+
+  import { Link } from 'svelte-navigator'
+
+  export let name
 
   // might be some binding problems
   // [[type { name String, completed Bool }]]
   export let tree
+
+  // vue does case conversion
+  export let allow_save
+
+  let saved = false
+  let copied = false
 
   const dispatch = createEventDispatcher()
 
@@ -17,8 +27,32 @@
   const completedNode = node => node.completed || node.node.completed || debugCompletedSet.has(node.name)
   const completedLayer = layer => layer.every(node => completedNode(node))
 
-  const begin = (node) => {
-    dispatch('begin', { node })
+  $: countCompleted = tree.map(
+    layer => layer.reduce(
+      (sum, node) => sum + (completedNode(node) ? 1 : 0), 0))
+    .reduce(
+      (x, y) => x + y, 0)
+  $: countNodes = tree.map(layer => layer.length).reduce((x, y) => x + y, 0)
+
+  $: proportionCompleted = countNodes > 0 ? countCompleted / countNodes : 1
+
+  let statePercent = 0
+
+  onMount(() => statePercent = Math.floor(proportionCompleted * 100 / 2))
+
+  function startCountUp(to) {
+    const timer = setInterval(() => {
+      if (statePercent < to * 100) {
+        statePercent++
+      } else {
+        clearInterval(timer)
+      }
+    }, 10)
+  }
+
+  $: startCountUp(proportionCompleted)
+
+    function begin(node) {
     // debug, I'm not removing this before pushing
     debugCompletedSet.add(node.name)
     debugCompletedSet = debugCompletedSet // a
@@ -26,8 +60,66 @@
     if (node.node) {
       node.node.completed = true
     }
+
+    dispatch('begin', { node })
+  }
+
+  function save() {
+    console.log('trying to save')
+
+    dispatch('save', { name })
+
+    saved = true
+  }
+
+  function share() {
+    copied = true
+    
+    navigator.clipboard.writeText(JSON.stringify(tree));
   }
 </script>
+
+<!-- Title Card -->
+<div class="bg-green-100 rounded-lg w-auto uppercase font-bold flex items-center p-8 m-8">
+  <div class="text-4xl text-gray-800">
+    <Link to="/skilltrees" class="font-mono text-sm text-gray-600 hover:text-gray-500"> &#x2039; Skilltrees /</Link>
+    { name }
+  </div>
+
+  <div class="ml-auto">
+    <span class="text-gray-700 mr-4">
+      ({ proportionCompleted < 1 ? `${statePercent}% Complete` : 'Done' })
+    </span>
+
+    <button
+      on:click={share}
+      class="
+        bg-blue-500 hover:bg-blue-700
+        text-white font-bold
+        py-2 px-4
+        rounded
+        w-28
+        focus:outline-none focus:shadow-outline">
+      &uarr; {copied ? 'Copied' : 'Share'}
+    </button>
+
+    {#if allow_save}
+      <button
+        on:click={() => save()}
+        class="
+        bg-blue-500 hover:bg-blue-700
+        text-white font-bold
+        py-2 px-4
+        rounded
+        w-28
+        focus:outline-none focus:shadow-outline
+        { saved ? 'opacity-50' : '' }"
+        disabled='{saved}'>
+        &#9998; { saved ? 'Saved' : 'Save' }
+      </button>
+    {/if}
+  </div>
+</div>
 
 <!-- Adjust Size As Needed In Parent Div-->
 <div class="pb-4">
@@ -98,4 +190,10 @@
       </div>
     </div>
   {/each}
+
+  <div class="flex justify-center my-8">
+    <span class="bg-green-100 rounded-lg p-8 uppercase font-bold">
+      Completion
+    </span>
+  </div>
 </div>

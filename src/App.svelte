@@ -22,8 +22,8 @@
       <Construct prompt={params.prompt}/>
     </Route>
 
-    <Route path="/construct/:obj" let:params>
-      <Skilltree obj_string={params.obj}/>
+    <Route path="/skilltree/:obj" let:params>
+      <Skilltree obj_key={params.obj}/>
     </Route>
   </main>
 </Router>
