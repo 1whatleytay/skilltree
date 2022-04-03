@@ -29,7 +29,7 @@
 
   $: countCompleted = tree.map(
     layer => layer.reduce(
-      (sum, node) => sum + (completedNode(node) ? 1 : 0), 0))
+      (sum, node) => sum + (completedNode(node, debugCompletedSet) ? 1 : 0), 0))
     .reduce(
       (x, y) => x + y, 0)
   $: countNodes = tree.map(layer => layer.length).reduce((x, y) => x + y, 0)
@@ -74,13 +74,13 @@
 
   function share() {
     copied = true
-    
+
     navigator.clipboard.writeText(JSON.stringify(tree));
   }
 </script>
 
 <!-- Title Card -->
-<div class="bg-green-100 rounded-lg w-auto uppercase font-bold flex items-center p-8 m-8">
+<div class="bg-green-100 rounded-lg w-auto max-w-4xl mx-auto uppercase font-bold flex items-center p-8 m-8">
   <div class="text-4xl text-gray-800">
     <Link to="/skilltrees" class="font-mono text-sm text-gray-600 hover:text-gray-500"> &#x2039; Skilltrees /</Link>
     { name }
